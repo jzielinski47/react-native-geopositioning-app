@@ -8,11 +8,9 @@ const Main = ({ navigation }) => {
 
     const [fontLoaded] = useFonts({ 'worksans': WorkSans_700Bold })
 
-    const navigate = (screen: string) => navigation.navigate(screen)
-
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.header} onPress={() => navigate('list')}>
+            <TouchableOpacity style={styles.header} onPress={() => navigation.navigate('list')}>
                 {fontLoaded ? <Text style={[styles.header, { fontFamily: 'worksans' }]}>Geo App</Text> : <ActivityIndicator size="large" color="#ffffff87" />}
             </TouchableOpacity>
             <Text style={styles.regular}>find and save your position</Text>

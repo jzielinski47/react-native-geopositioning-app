@@ -9,27 +9,34 @@ const List = ({ navigation }) => {
 
     const [locations, setLocations] = useState([]);
     const [selectedLocations, setSelectedLocations] = useState([]);
-    const [switchStatus, setSwitchStatus] = useState(false)
+    const [switchAllStatus, setSwitchAllStatus] = useState(false)
 
     const navigate = (screen: string) => navigation.navigate(screen)
 
-    useEffect(() => { Location.requestForegroundPermissionsAsync(); }, [])
+    useEffect(() => Location.requestForegroundPermissionsAsync(), [])
+    useEffect(() => downloadLocations(), [])
 
-    useEffect(() => console.log(locations), [locations])
+    const deleteAll = async () => {
+        try {
+            await AsyncStorage.clear();
+        } catch (e) { console.log(e) }
+        setSelectedLocations([])
+        await downloadLocations()
+
+    }
 
     const downloadLocations = async () => {
         const keys = await AsyncStorage.getAllKeys();
         const stores = await AsyncStorage.multiGet(keys);
+        console.log(keys, stores)
         const curLocations = stores.map(location => JSON.parse(location[1]))
         setLocations(curLocations)
     }
 
-    const deleteAll = async () => {
-        setLocations([]), setSelectedLocations([])
-        await AsyncStorage.clear();
-    }
-
-    const selectAll = async () => { setSelectedLocations(locations) }
+    const downloadLocation = async () => {
+        let val = await AsyncStorage.getItem("key");
+        console.log(val);
+    };
 
     const saveLocation = async () => {
         await Location.requestForegroundPermissionsAsync();
@@ -48,6 +55,8 @@ const List = ({ navigation }) => {
                 },
             ],
         );
+
+        await downloadLocations()
     }
 
     return (
@@ -59,12 +68,11 @@ const List = ({ navigation }) => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 10, paddingBottom: 10 }}>
                 <MyButton title={"przejdź do mapy"} onPress={() => console.log('mapa')} />
                 <Switch trackColor={{ false: "#767577", true: '#303f9f' }} thumbColor='#fafafa'
-                    onValueChange={() => { setSelectedLocations(!switchStatus ? locations : []); setSwitchStatus(!switchStatus); }} value={switchStatus} />
+                    onValueChange={() => { setSelectedLocations(!switchAllStatus ? locations : []); setSwitchAllStatus(!switchAllStatus); }} value={switchAllStatus} />
             </View>
-
             <FlatList
                 data={locations}
-                renderItem={({ item }) => (<ListItem id={item.id} title={item.timestamp} latitude={item.coords.latitude} longitude={item.coords.longitude} selectedLocations={selectedLocations} setSelectedLocations={setSelectedLocations} />)}
+                renderItem={({ item }) => (<ListItem id={item.id} title={item.timestamp} latitude={item.coords.latitude} longitude={item.coords.longitude} selectedLocations={selectedLocations} setSelectedLocations={setSelectedLocations} switchAllStatus={switchAllStatus} data={item} />)}
                 style={styles.list}
             />
         </View>
