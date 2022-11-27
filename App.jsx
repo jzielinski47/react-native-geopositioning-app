@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, StatusBar, ActivityIndicator } from 'react-native';
 
 import Main from './screens/Main';
+import List from './screens/List';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +13,7 @@ const App = () => {
     <NavigationContainer >
       <Stack.Navigator initialRouteName="main">
         <Stack.Screen name="main" component={Main} options={{ headerShown: false }} />
-        <Stack.Screen name="list" component={Main} options={{ title: 'Zapis pozycji', headerStyle: { backgroundColor: '#303f9f', }, }} />
+        <Stack.Screen name="list" component={List} options={{ title: 'Zapis pozycji', headerStyle: { backgroundColor: '#303f9f', }, }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
