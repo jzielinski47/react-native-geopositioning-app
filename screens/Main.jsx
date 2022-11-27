@@ -6,14 +6,14 @@ import { WorkSans_700Bold } from '@expo-google-fonts/work-sans'
 
 const Main = ({ navigation }) => {
 
-    const [fontLoaded] = useFonts({ 'Worksans': WorkSans_700Bold })
+    const [fontLoaded] = useFonts({ 'worksans': WorkSans_700Bold })
 
     const navigate = (screen: string) => navigation.navigate(screen)
 
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.header} onPress={() => navigate('list')}>
-                {fontLoaded ? <Text style={[styles.header, { fontFamily: 'Worksans' }]}>Geo App</Text> : <ActivityIndicator size="large" color="#ffffff87" />}
+                {fontLoaded ? <Text style={[styles.header, { fontFamily: 'worksans' }]}>Geo App</Text> : <ActivityIndicator size="large" color="#ffffff87" />}
             </TouchableOpacity>
             <Text style={styles.regular}>find and save your position</Text>
             <Text style={styles.regular}>use google maps 🌍</Text>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    header: { fontSize: 54, color: '#fff', margin: 12.5, fontFamily: 'Worksans', },
+    header: { fontSize: 54, color: '#fff', margin: 12.5, fontFamily: 'worksans', },
     regular: { fontSize: 24, fontWeight: 'regular', color: '#ffffff' }
 });
 
