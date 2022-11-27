@@ -13,7 +13,7 @@ const App = () => {
     <NavigationContainer >
       <Stack.Navigator initialRouteName="main">
         <Stack.Screen name="main" component={Main} options={{ headerShown: false }} />
-        <Stack.Screen name="list" component={List} options={{ title: 'Zapis pozycji', headerStyle: { backgroundColor: '#303f9f', }, }} />
+        <Stack.Screen name="list" component={List} options={{ title: 'Zapis pozycji', headerStyle: { backgroundColor: '#303f9f' }, headerTintColor: '#fff', }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
