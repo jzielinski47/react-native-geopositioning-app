@@ -14,27 +14,28 @@ const List = ({ navigation }) => {
     const navigate = (screen: string) => navigation.navigate(screen)
 
     useEffect(() => { Location.requestForegroundPermissionsAsync(); true }, [])
-    useEffect(() => { downloadLocations(); true }, [])
+    useEffect(() => { downloadLocations(); setSelectedLocations([]); true }, [])
 
     const deleteAll = async () => {
         try {
             await AsyncStorage.clear();
         } catch (e) { console.log(e) }
+        setLocations([])
         setSelectedLocations([])
         await downloadLocations()
-
     }
 
     const downloadLocations = async () => {
         const keys = await AsyncStorage.getAllKeys();
         const stores = await AsyncStorage.multiGet(keys);
         console.log(keys, stores)
+        setLocations([])
         const curLocations = stores.map(location => { if (!location[0].startsWith('select')) return JSON.parse(location[1]) })
         setLocations(curLocations)
     }
 
     const downloadLocation = async (timestamp) => {
-        let val = await AsyncStorage.getItem(timestamp);
+        const val = await AsyncStorage.getItem(timestamp);
         console.log(val);
     };
 
@@ -66,7 +67,7 @@ const List = ({ navigation }) => {
                 <MyButton title={"usuń wszystkie dane"} onPress={() => deleteAll()} />
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingTop: 10, paddingBottom: 10 }}>
-                <MyButton title={"przejdź do mapy"} onPress={() => selectedLocations.length === 0 ? alert('zaznacz przynajmniej jedna pozycje') : navigation.navigate('map')} />
+                <MyButton title={"przejdź do mapy"} onPress={() => selectedLocations.length === 0 ? alert('zaznacz przynajmniej jedna pozycje') : navigation.navigate('map', { selected: selectedLocations })} />
                 <Switch trackColor={{ false: "#767577", true: '#303f9f' }} thumbColor='#fafafa'
                     onValueChange={() => { setSwitchAllStatus(!switchAllStatus) }} value={switchAllStatus} />
                 {/* {setSelectedLocations(!switchAllStatus ? locations : []); setSwitchAllStatus(!switchAllStatus} */}

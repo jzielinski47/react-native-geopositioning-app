@@ -3,48 +3,35 @@ import { StyleSheet, Text, View, StatusBar, ActivityIndicator, TouchableOpacity,
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import MyButton from '../components/MyButton';
-import MapView from 'react-native-maps';
-import Marker from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
+
 
 const Map = ({ route }) => {
 
     let estimatedLatitude = 50.001
     let estimatedLongitude = 20
 
-    const [markers, setMarkers] = useState([])
-    useEffect(() => downloadLocations(), [])
-
-
-    const downloadLocations = async () => {
-        const keys = await AsyncStorage.getAllKeys();
-        const stores = await AsyncStorage.multiGet(keys);
-        console.log(keys, stores)
-        const curLocations = stores.map(location => location[0].startsWith('select') ? JSON.parse(location[1]) : null)
-        setMarkers(curLocations.filter(el => el !== null))
-        console.log('markers', markers)
-
-        if (markers[0]) {
-            estimatedLatitude = markers[0].latitude;
-            estimatedLongitude = markers[0].longitude;
-        }
+    const mapSettings = {
+        longitude: route.params.selected[0].longitude,
+        latitude: route.params.selected[0].latitude,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <MapView
-                style={{ flex: 1 }}
-                initialRegion={{
-                    longitude: estimatedLongitude,
-                    latitude: estimatedLatitude,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001,
-                }}
-            >
 
+        <MapView style={{ flex: 1 }} initialRegion={mapSettings} >
+            {route.params.selected.map(location => (
+                <Marker
+                    coordinate={{
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                    }}
+                    key={location.timestamp}
+                />
+            ))}
+        </MapView>
 
-
-            </MapView>
-        </View>
     );
 }
 
