@@ -8,55 +8,43 @@ import Marker from 'react-native-maps';
 
 const Map = ({ route }) => {
 
+    let estimatedLatitude = 50.001
+    let estimatedLongitude = 20
+
     const [markers, setMarkers] = useState([])
-
-    let estimatedLatitude = 0
-    let estimatedLongitude = 0
-
-    useEffect(() => {
-        downloadLocations()
-        if (markers[0]) {
-            estimatedLatitude = markers[0].latitude;
-            estimatedLongitude = markers[0].longitude;
-        }
-        return true;
-    }, [markers])
+    useEffect(() => downloadLocations(), [])
 
 
     const downloadLocations = async () => {
         const keys = await AsyncStorage.getAllKeys();
         const stores = await AsyncStorage.multiGet(keys);
         console.log(keys, stores)
-        const curLocations = stores.map(location => { if (location[0].startsWith('select')) return JSON.parse(location[1]) })
-        setMarkers(curLocations)
+        const curLocations = stores.map(location => location[0].startsWith('select') ? JSON.parse(location[1]) : null)
+        setMarkers(curLocations.filter(el => el !== null))
         console.log('markers', markers)
+
+        if (markers[0]) {
+            estimatedLatitude = markers[0].latitude;
+            estimatedLongitude = markers[0].longitude;
+        }
     }
 
     return (
-        <MapView
-            style={{ flex: 1 }}
-            initialRegion={{
-                longitude: estimatedLongitude,
-                latitude: estimatedLatitude,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-            }}
-        >
-            {markers.map(mark => {
-                console.log(mark)
-
-                // return 
+        <View style={{ flex: 1 }}>
+            <MapView
+                style={{ flex: 1 }}
+                initialRegion={{
+                    longitude: estimatedLongitude,
+                    latitude: estimatedLatitude,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001,
+                }}
+            >
 
 
-                // (<Marker coordinate={{
-                //     latitude: mark.latitude,
-                //     longitude: mark.longitude,
-                // }}
-                //     title={"tytul"}
-                //     description={"opis"}
-                // />)
-            })}
-        </MapView>
+
+            </MapView>
+        </View>
     );
 }
 
