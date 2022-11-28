@@ -18,12 +18,17 @@ const List = ({ navigation }) => {
     useEffect(() => { Location.requestForegroundPermissionsAsync(); true }, [])
     useEffect(() => { downloadLocations(); }, [])
 
+    useEffect(() => {
+        if (selectedLocations.length === locations.length) { setSwitchAllStatus(true) }
+    }, [selectedLocations])
+
     const deleteAll = async () => {
         try {
             await AsyncStorage.clear();
         } catch (e) { console.log(e) }
         setLocations([])
         setSelectedLocations([])
+        alert('deleted all data')
         await downloadLocations()
     }
 

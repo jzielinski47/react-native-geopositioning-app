@@ -5,7 +5,6 @@ import * as Location from "expo-location";
 import MyButton from '../components/MyButton';
 import MapView, { Marker } from 'react-native-maps';
 
-
 const Map = ({ route }) => {
 
     let estimatedLatitude = 50.001
@@ -19,19 +18,17 @@ const Map = ({ route }) => {
     }
 
     return (
-
         <MapView style={{ flex: 1 }} initialRegion={mapSettings} >
             {route.params.selected.map(location => (
                 <Marker
                     coordinate={{
                         latitude: location.latitude,
-                        longitude: location.longitude,
+                        longitude: location.longitude
                     }}
                     key={location.timestamp}
                 />
             ))}
         </MapView>
-
     );
 }
 
