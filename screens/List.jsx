@@ -10,11 +10,13 @@ const List = ({ navigation }) => {
     const [locations, setLocations] = useState([]);
     const [selectedLocations, setSelectedLocations] = useState([]);
     const [switchAllStatus, setSwitchAllStatus] = useState(false)
+    const [canRender, setRender] = useState(false)
 
     const navigate = (screen: string) => navigation.navigate(screen)
 
+    useEffect(() => { setSelectedLocations([]); setSwitchAllStatus(false); }, [])
     useEffect(() => { Location.requestForegroundPermissionsAsync(); true }, [])
-    useEffect(() => { downloadLocations(); setSelectedLocations([]); true }, [])
+    useEffect(() => { downloadLocations(); }, [])
 
     const deleteAll = async () => {
         try {
@@ -32,6 +34,7 @@ const List = ({ navigation }) => {
         setLocations([])
         const curLocations = stores.map(location => { if (!location[0].startsWith('select')) return JSON.parse(location[1]) })
         setLocations(curLocations)
+        setRender(true)
     }
 
     const downloadLocation = async (timestamp) => {
@@ -74,10 +77,10 @@ const List = ({ navigation }) => {
 
                 {/* {(<ListItem timestamp={item.timestamp} latitude={item.coords.latitude} longitude={item.coords.longitude} selectedLocations={selectedLocations} setSelectedLocations={setSelectedLocations} switchAllStatus={switchAllStatus} />)} */}
             </View>
-            {locations.length > 0 ?
+            {canRender && locations.length > 0 ?
                 <FlatList
                     data={locations}
-                    renderItem={({ item }) => (<ListItem timestamp={item.timestamp} latitude={item.coords.latitude} longitude={item.coords.longitude} selectedLocations={selectedLocations} setSelectedLocations={setSelectedLocations} switchAllStatus={switchAllStatus} />)}
+                    renderItem={({ item }) => canRender ? (<ListItem timestamp={item.timestamp} latitude={item.coords.latitude} longitude={item.coords.longitude} selectedLocations={selectedLocations} setSelectedLocations={setSelectedLocations} switchAllStatus={switchAllStatus} />) : null}
                     style={styles.list}
                 /> : <ActivityIndicator size="small" color="#ff0000" />
             }

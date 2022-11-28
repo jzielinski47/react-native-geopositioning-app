@@ -6,7 +6,7 @@ const ListItem = ({ timestamp, latitude, longitude, selectedLocations, setSelect
 
     const [locationSelected, setLocationSelected] = useState(false)
 
-    useEffect(() => { selectAll(); getValue(); }, [switchAllStatus])
+    useEffect(() => { selectAll(); }, [switchAllStatus])
 
     const saveData = async () => {
         const json = { timestamp, latitude, longitude }
@@ -29,11 +29,11 @@ const ListItem = ({ timestamp, latitude, longitude, selectedLocations, setSelect
             const json = { timestamp, latitude, longitude }
             setSelectedLocations(prevState => [...prevState, json])
             setLocationSelected(true)
-            saveData()
+            // saveData()
         } else {
             setSelectedLocations(prevState => [...prevState.filter(location => location.timestamp != timestamp)])
             setLocationSelected(false)
-            deleteData()
+            // deleteData()
         }
     }
 
@@ -42,11 +42,11 @@ const ListItem = ({ timestamp, latitude, longitude, selectedLocations, setSelect
             const json = { timestamp, latitude, longitude }
             setSelectedLocations(prevState => [...prevState, json])
             setLocationSelected(true)
-            saveData()
+            // saveData()
         } else {
             setSelectedLocations(prevState => [...prevState.filter(location => location.timestamp != timestamp)])
             setLocationSelected(false)
-            deleteData()
+            // deleteData()
         }
     }
 
@@ -64,7 +64,7 @@ const ListItem = ({ timestamp, latitude, longitude, selectedLocations, setSelect
                 <Text style={styles.regular}>longitude: {longitude}</Text>
             </View>
             <Switch trackColor={{ false: "#767577", true: '#303f9f' }} thumbColor='#fafafa'
-                onValueChange={() => { setLocationSelected(!locationSelected); select(); getValue() }} value={locationSelected} />
+                onValueChange={() => { setLocationSelected(!locationSelected); select(); }} value={locationSelected} />
         </View>
     );
 }
