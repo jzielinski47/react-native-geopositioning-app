@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, StatusBar, ActivityIndicator } from 'react-nati
 
 import Main from './screens/Main';
 import List from './screens/List';
+import Map from './screens/Map';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="main">
         <Stack.Screen name="main" component={Main} options={{ headerShown: false }} />
         <Stack.Screen name="list" component={List} options={{ title: 'Zapis pozycji', headerStyle: { backgroundColor: '#303f9f' }, headerTintColor: '#fff', }} />
+        <Stack.Screen name="map" component={Map} options={{ title: 'Lokalizacja na mapie', headerStyle: { backgroundColor: '#303f9f' }, headerTintColor: '#fff', }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
